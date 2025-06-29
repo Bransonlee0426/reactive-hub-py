@@ -23,7 +23,6 @@ docker compose down
 # 2. 取消虛擬環境
 deactivate
 ```
-
 ## Python 虛擬環境設定
 
 ### 建立虛擬環境
