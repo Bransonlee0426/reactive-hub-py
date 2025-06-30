@@ -7,7 +7,7 @@ that can be included in the main FastAPI application.
 
 from fastapi import APIRouter
 
-from app.api.v1.endpoints import health, demo
+from app.api.v1.endpoints import health
 from app.core.config import settings
 
 # Create the main API router for version 1
@@ -21,18 +21,6 @@ api_router.include_router(
     responses={
         200: {"description": "Healthy"},
         503: {"description": "Service Unavailable"}
-    }
-)
-
-# Include demo endpoints
-api_router.include_router(
-    demo.router,
-    prefix="/demo",
-    tags=["Demo & Testing"],
-    responses={
-        200: {"description": "Success"},
-        404: {"description": "Not Found"},
-        422: {"description": "Validation Error"}
     }
 )
 
@@ -59,18 +47,11 @@ async def api_v1_info():
         "available_endpoints": {
             "health_check": f"{settings.api_v1_str}/health",
             "simple_health": f"{settings.api_v1_str}/health/simple", 
-            "database_health": f"{settings.api_v1_str}/health/database",
-            "api_info": f"{settings.api_v1_str}/demo/info",
-            "demo_items": f"{settings.api_v1_str}/demo/items",
-            "single_item": f"{settings.api_v1_str}/demo/items/{{item_id}}",
-            "echo_test": f"{settings.api_v1_str}/demo/echo",
-            "demo_status": f"{settings.api_v1_str}/demo/status"
+            "database_health": f"{settings.api_v1_str}/health/database"
         },
         "features": [
             "Comprehensive Health Monitoring",
             "Database Connectivity Checks",
-            "Pagination Support",
-            "Request/Response Validation",
             "Interactive API Documentation",
             "CORS Support for Frontend Integration"
         ]

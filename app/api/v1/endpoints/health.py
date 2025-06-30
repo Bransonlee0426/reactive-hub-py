@@ -10,6 +10,7 @@ from typing import Dict, Any
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
+from sqlalchemy import text
 
 from app.api.deps import get_db, check_database_connection
 from app.core.config import settings
@@ -18,7 +19,7 @@ from app.schemas.base import MessageResponse
 router = APIRouter()
 
 
-@router.get("/health", response_model=Dict[str, Any])
+@router.get("/", response_model=Dict[str, Any])
 async def health_check(
     db: Session = Depends(get_db)
 ) -> Dict[str, Any]:
@@ -42,7 +43,6 @@ async def health_check(
     database_status = "connected"
     try:
         # Test database with a simple query
-        from sqlalchemy import text
         db.execute(text("SELECT 1"))
         db.commit()
     except Exception as e:
@@ -62,8 +62,8 @@ async def health_check(
     }
 
 
-@router.get("/health/simple", response_model=MessageResponse)
-async def simple_health_check() -> MessageResponse:
+@router.get("/simple", response_model=Dict[str, Any])
+async def simple_health_check() -> Dict[str, Any]:
     """
     Simple health check endpoint
     
@@ -71,15 +71,16 @@ async def simple_health_check() -> MessageResponse:
     Useful for basic uptime monitoring.
     
     Returns:
-        MessageResponse: Simple success message
+        Dict: Simple success message
     """
-    return MessageResponse(
-        message=f"{settings.project_name} is running",
-        success=True
-    )
+    return {
+        "message": f"{settings.project_name} is running",
+        "status": "healthy",
+        "timestamp": datetime.utcnow().isoformat() + "Z"
+    }
 
 
-@router.get("/health/database", response_model=Dict[str, Any])
+@router.get("/database", response_model=Dict[str, Any])
 async def database_health_check(
     is_connected: bool = Depends(check_database_connection),
     db: Session = Depends(get_db)
