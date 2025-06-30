@@ -1,0 +1,342 @@
+{
+	"info": {
+		"_postman_id": "reactive-hub-api-collection",
+		"name": "Reactive Hub API",
+		"description": "FastAPI 應用程式的完整 API 集合，包含健康檢查、demo 端點和所有可用功能。",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "根端點",
+			"item": [
+				{
+					"name": "根端點 - 歡迎訊息",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								""
+							]
+						},
+						"description": "取得歡迎訊息和基本 API 資訊"
+					},
+					"response": []
+				},
+				{
+					"name": "根健康檢查",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/health",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"health"
+							]
+						},
+						"description": "基本健康檢查端點"
+					},
+					"response": []
+				}
+			],
+			"description": "應用程式的根端點"
+		},
+		{
+			"name": "API v1",
+			"item": [
+				{
+					"name": "API v1 資訊",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								""
+							]
+						},
+						"description": "取得 API v1 資訊和可用端點列表"
+					},
+					"response": []
+				}
+			],
+			"description": "API v1 根端點"
+		},
+		{
+			"name": "健康檢查",
+			"item": [
+				{
+					"name": "綜合健康檢查",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/health/health",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"health",
+								"health"
+							]
+						},
+						"description": "完整的健康檢查，包含資料庫連線驗證"
+					},
+					"response": []
+				},
+				{
+					"name": "簡單健康檢查",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/health/simple",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"health",
+								"simple"
+							]
+						},
+						"description": "簡單的健康檢查，不驗證資料庫連線"
+					},
+					"response": []
+				},
+				{
+					"name": "資料庫健康檢查",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/health/database",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"health",
+								"database"
+							]
+						},
+						"description": "專門的資料庫連線健康檢查"
+					},
+					"response": []
+				}
+			],
+			"description": "各種健康檢查端點，用於監控 API 和資料庫狀態"
+		},
+		{
+			"name": "Demo 端點",
+			"item": [
+				{
+					"name": "Demo API 資訊",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/demo/info",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"demo",
+								"info"
+							]
+						},
+						"description": "取得 API 詳細資訊和功能列表"
+					},
+					"response": []
+				},
+				{
+					"name": "取得 Demo 項目列表（分頁）",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/demo/items?page=1&size=10",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"demo",
+								"items"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1",
+									"description": "頁碼（從 1 開始）"
+								},
+								{
+									"key": "size",
+									"value": "10",
+									"description": "每頁項目數量（最大 100）"
+								}
+							]
+						},
+						"description": "取得分頁的 demo 項目列表"
+					},
+					"response": []
+				},
+				{
+					"name": "取得 Demo 項目列表（第2頁）",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/demo/items?page=2&size=5",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"demo",
+								"items"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "2",
+									"description": "頁碼"
+								},
+								{
+									"key": "size",
+									"value": "5",
+									"description": "每頁項目數量"
+								}
+							]
+						},
+						"description": "示範分頁功能 - 第2頁，每頁5項"
+					},
+					"response": []
+				},
+				{
+					"name": "取得單一 Demo 項目",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/demo/items/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"demo",
+								"items",
+								"1"
+							]
+						},
+						"description": "根據 ID 取得特定的 demo 項目"
+					},
+					"response": []
+				},
+				{
+					"name": "取得單一 Demo 項目 (ID: 25)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/demo/items/25",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"demo",
+								"items",
+								"25"
+							]
+						},
+						"description": "取得 ID 為 25 的 demo 項目"
+					},
+					"response": []
+				},
+				{
+					"name": "回音測試 (Echo)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"message\": \"Hello from Postman!\",\n  \"timestamp\": \"2024-12-30T10:30:00Z\",\n  \"test_data\": {\n    \"key1\": \"value1\",\n    \"key2\": 123,\n    \"key3\": true\n  }\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/demo/echo",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"demo",
+								"echo"
+							]
+						},
+						"description": "測試 POST 請求，API 會回傳發送的資料"
+					},
+					"response": []
+				},
+				{
+					"name": "Demo 狀態檢查",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/demo/status",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"demo",
+								"status"
+							]
+						},
+						"description": "取得 demo 端點的狀態"
+					},
+					"response": []
+				}
+			],
+			"description": "示範和測試 API 功能的端點"
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:3001",
+			"description": "API 基礎 URL"
+		}
+	]
+} 

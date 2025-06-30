@@ -13,6 +13,9 @@ docker compose up -d
 # 3. 驗證環境（可選）
 docker ps                    # 確認資料庫容器運行
 python --version            # 確認 Python 環境
+
+# 4. 載入資料庫工具（可選）
+source scripts/db_aliases.sh  # 載入資料庫快速指令
 ```
 
 ### 每次開發結束時執行：
@@ -105,6 +108,66 @@ docker compose down
 ```python
 DATABASE_URL = "postgresql://user:password@localhost:5432/myapidb"
 ```
+
+## 🗄️ 資料庫管理工具
+
+專案提供了一套完整的資料庫管理工具，讓您可以通過簡單的命令列指令進行所有資料庫操作。
+
+### 啟動資料庫工具
+```bash
+# 載入所有資料庫快速指令
+source scripts/db_aliases.sh
+```
+
+### 🔗 基本操作
+```bash
+dbconn          # 連接到資料庫
+dbtables        # 列出所有表格
+dbquery "SQL"   # 執行 SQL 查詢
+dbdesc table    # 查看表格結構
+```
+
+### 📊 資料查看
+```bash
+dbcount users        # 計算記錄數
+dbsample users 5     # 查看前5筆資料
+dbsize              # 查看資料庫大小
+dbversion           # 查看資料庫版本
+```
+
+### 🛠️ 開發工具
+```bash
+dbhealth           # 資料庫健康檢查
+dbcreate_sample    # 創建示例表格和資料
+dbreset           # 重置資料庫（謹慎使用）
+sqlhelp           # 查看 SQL 範本
+```
+
+### 🚀 環境管理
+```bash
+devstart          # 啟動開發環境
+devstop           # 停止開發環境
+dbstatus          # 查看容器狀態
+```
+
+### 使用範例
+```bash
+# 1. 載入工具
+source scripts/db_aliases.sh
+
+# 2. 創建示例資料
+dbcreate_sample
+
+# 3. 查看資料
+dbtables
+dbsample sample_items 3
+
+# 4. 執行查詢
+dbquery "SELECT COUNT(*) FROM sample_items WHERE price > 10000;"
+```
+
+### SQL 範本參考
+專案還提供了 `scripts/sql_templates.sql` 檔案，包含常用的 SQL 查詢範本，可以使用 `sqlhelp` 命令查看。
 
 ## 專案說明
 這是一個使用 FastAPI 框架的 Python Web 應用程式專案，整合了 SQLAlchemy ORM 和 PostgreSQL 資料庫。使用 Docker Compose 來管理開發環境中的資料庫服務。
