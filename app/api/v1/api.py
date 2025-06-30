@@ -7,7 +7,7 @@ that can be included in the main FastAPI application.
 
 from fastapi import APIRouter
 
-from app.api.v1.endpoints import health
+from app.api.v1.endpoints import health, books
 from app.core.config import settings
 
 # Create the main API router for version 1
@@ -22,6 +22,13 @@ api_router.include_router(
         200: {"description": "Healthy"},
         503: {"description": "Service Unavailable"}
     }
+)
+
+# Include book endpoints
+api_router.include_router(
+    books.router,
+    prefix="/books",
+    tags=["Books"]
 )
 
 # Root API v1 endpoint
@@ -47,7 +54,8 @@ async def api_v1_info():
         "available_endpoints": {
             "health_check": f"{settings.api_v1_str}/health",
             "simple_health": f"{settings.api_v1_str}/health/simple", 
-            "database_health": f"{settings.api_v1_str}/health/database"
+            "database_health": f"{settings.api_v1_str}/health/database",
+            "books": f"{settings.api_v1_str}/books"
         },
         "features": [
             "Comprehensive Health Monitoring",

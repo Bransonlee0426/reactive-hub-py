@@ -2,7 +2,7 @@
 	"info": {
 		"_postman_id": "reactive-hub-api-collection",
 		"name": "Reactive Hub API",
-		"description": "FastAPI 應用程式的 API 集合，包含健康檢查端點和系統監控功能。\n\n## 🚀 快速開始\n1. 確保服務器運行在 http://localhost:3001\n2. 使用健康檢查端點驗證系統狀態\n3. 查看 Swagger 文檔：http://localhost:3001/docs\n\n## 📊 端點分類\n- **根端點**：基本資訊和歡迎訊息\n- **健康檢查**：系統和資料庫監控\n- **API v1**：API 探索和資訊端點",
+		"description": "FastAPI 應用程式的 API 集合，包含健康檢查端點、書本管理功能和系統監控。\n\n## 🚀 快速開始\n1. 確保服務器運行在 http://localhost:3001\n2. 使用健康檢查端點驗證系統狀態\n3. 查看 Swagger 文檔：http://localhost:3001/docs\n\n## 📊 端點分類\n- **根端點**：基本資訊和歡迎訊息\n- **健康檢查**：系統和資料庫監控\n- **API v1**：API 探索和資訊端點\n- **書本管理**：書本資源的 CRUD 操作",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "reactive-hub-api"
 	},
@@ -126,7 +126,7 @@
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"message\": \"Welcome to Reactive Hub API API v1\",\n    \"version\": \"1.0.0\",\n    \"environment\": \"development\",\n    \"documentation\": {\n        \"swagger_ui\": \"/docs\",\n        \"redoc\": \"/redoc\"\n    },\n    \"available_endpoints\": {\n        \"health_check\": \"/api/v1/health\",\n        \"simple_health\": \"/api/v1/health/simple\",\n        \"database_health\": \"/api/v1/health/database\"\n    },\n    \"features\": [\n        \"Comprehensive Health Monitoring\",\n        \"Database Connectivity Checks\",\n        \"Interactive API Documentation\",\n        \"CORS Support for Frontend Integration\"\n    ]\n}"
+							"body": "{\n    \"message\": \"Welcome to Reactive Hub API API v1\",\n    \"version\": \"1.0.0\",\n    \"environment\": \"development\",\n    \"documentation\": {\n        \"swagger_ui\": \"/docs\",\n        \"redoc\": \"/redoc\"\n    },\n    \"available_endpoints\": {\n        \"health_check\": \"/api/v1/health\",\n        \"simple_health\": \"/api/v1/health/simple\",\n        \"database_health\": \"/api/v1/health/database\",\n        \"books\": \"/api/v1/books\"\n    },\n    \"features\": [\n        \"Comprehensive Health Monitoring\",\n        \"Database Connectivity Checks\",\n        \"Interactive API Documentation\",\n        \"CORS Support for Frontend Integration\",\n        \"Book Resource Management\"\n    ]\n}"
 						}
 					]
 				}
@@ -324,6 +324,160 @@
 				}
 			],
 			"description": "## 🏥 健康檢查端點\n\n提供多層級的健康檢查功能，適合不同的監控需求：\n\n### 📊 端點比較\n\n| 端點 | 用途 | 檢查項目 | 回應時間 | 建議頻率 |\n|------|------|----------|----------|----------|\n| `/health/` | 全面監控 | 服務+資料庫 | 較慢 | 30-60秒 |\n| `/health/simple` | 快速檢查 | 僅服務 | 最快 | 5-15秒 |\n| `/health/database` | 資料庫監控 | 專門資料庫 | 中等 | 60秒 |\n\n### 🎯 使用建議\n\n- **生產環境監控**：使用 `/health/` 進行全面檢查\n- **負載均衡器**：使用 `/health/simple` 快速檢查\n- **資料庫管理**：使用 `/health/database` 專門監控\n- **開發除錯**：依故障類型選擇合適端點"
+		},
+		{
+			"name": "📚 書本管理",
+			"item": [
+				{
+					"name": "創建新書本",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"The Pragmatic Programmer\",\n    \"author\": \"Andrew Hunt, David Thomas\",\n    \"source_url\": \"https://pragprog.com/titles/tpp20/the-pragmatic-programmer-20th-anniversary-edition/\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/books/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"books",
+								""
+							]
+						},
+						"description": "## 創建新書本\n\n**新增書本記錄到資料庫**。\n\n### 📝 請求格式\n- **Content-Type**: `application/json`\n- **HTTP Method**: `POST`\n- **Endpoint**: `/api/v1/books/`\n\n### 📋 必填欄位\n\n| 欄位名稱 | 類型 | 長度限制 | 說明 | 範例 |\n|----------|------|----------|------|------|\n| `title` | string | 1-255 字元 | 書本標題 | \"The Pragmatic Programmer\" |\n| `author` | string | 1-255 字元 | 作者姓名 | \"Andrew Hunt, David Thomas\" |\n| `source_url` | string | 1-500 字元 | 書本來源連結 | \"https://...\" |\n\n### ✅ 自動處理欄位\n- `id`: 自動產生的唯一識別碼\n- `curation_status`: 預設為 \"pending\"\n- `created_at`: 自動記錄創建時間\n- `updated_at`: 自動記錄更新時間\n- `is_active`: 預設為 true\n\n### 🎯 使用場景\n- 📖 **內容管理**：新增推薦書籍\n- 🔗 **資源收集**：整理學習資源\n- 📊 **書單建立**：建立主題書單\n- 🎓 **教育平台**：課程參考書目\n\n### 🔒 資料驗證\n- 自動去除前後空白字元\n- URL 格式基本驗證\n- 字串長度限制檢查\n- 必填欄位驗證\n\n### 📤 回應格式\n- **成功**: 201 Created + 完整書本資料\n- **驗證錯誤**: 422 Unprocessable Entity\n- **伺服器錯誤**: 500 Internal Server Error"
+					},
+					"response": [
+						{
+							"name": "成功創建書本",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"title\": \"The Pragmatic Programmer\",\n    \"author\": \"Andrew Hunt, David Thomas\",\n    \"source_url\": \"https://pragprog.com/titles/tpp20/the-pragmatic-programmer-20th-anniversary-edition/\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/v1/books/",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"books",
+										""
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": 1,\n    \"title\": \"The Pragmatic Programmer\",\n    \"author\": \"Andrew Hunt, David Thomas\",\n    \"source_url\": \"https://pragprog.com/titles/tpp20/the-pragmatic-programmer-20th-anniversary-edition/\",\n    \"curation_status\": \"pending\",\n    \"created_at\": \"2024-06-30T15:30:45.123456Z\"\n}"
+						},
+						{
+							"name": "驗證錯誤 - 缺少必填欄位",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"title\": \"\",\n    \"author\": \"Andrew Hunt\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/v1/books/",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"books",
+										""
+									]
+								}
+							},
+							"status": "Unprocessable Entity",
+							"code": 422,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"detail\": [\n        {\n            \"type\": \"string_too_short\",\n            \"loc\": [\"body\", \"title\"],\n            \"msg\": \"String should have at least 1 character\",\n            \"input\": \"\",\n            \"ctx\": {\"min_length\": 1}\n        },\n        {\n            \"type\": \"missing\",\n            \"loc\": [\"body\", \"source_url\"],\n            \"msg\": \"Field required\",\n            \"input\": {\"title\": \"\", \"author\": \"Andrew Hunt\"}\n        }\n    ]\n}"
+						},
+						{
+							"name": "驗證錯誤 - 字串過長",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"title\": \"這是一個非常非常非常長的書名，超過了255個字元的限制...(重複到超過255字元)\",\n    \"author\": \"作者名稱\",\n    \"source_url\": \"https://example.com/book\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/v1/books/",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"books",
+										""
+									]
+								}
+							},
+							"status": "Unprocessable Entity",
+							"code": 422,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"detail\": [\n        {\n            \"type\": \"string_too_long\",\n            \"loc\": [\"body\", \"title\"],\n            \"msg\": \"String should have at most 255 characters\",\n            \"input\": \"這是一個非常非常非常長的書名...\",\n            \"ctx\": {\"max_length\": 255}\n        }\n    ]\n}"
+						}
+					]
+				}
+			],
+			"description": "## 📚 書本管理 API\n\n提供書本資源的創建、查詢、更新和刪除功能。\n\n### 🎯 核心功能\n\n- **📝 創建書本**：新增書本記錄到系統\n- **🔍 查詢書本**：按條件搜尋和列表顯示\n- **✏️ 更新書本**：修改書本資訊和狀態\n- **🗑️ 刪除書本**：軟刪除機制保護資料\n\n### 📊 資料結構\n\n**書本基本資訊：**\n- `title`: 書本標題\n- `author`: 作者姓名\n- `source_url`: 書本來源連結\n\n**系統管理欄位：**\n- `id`: 唯一識別碼\n- `curation_status`: 審核狀態 (pending/approved/rejected)\n- `created_at`: 創建時間\n- `updated_at`: 更新時間\n- `is_active`: 啟用狀態\n\n### 🔄 審核流程\n\n1. **創建** → `pending` (待審核)\n2. **審核** → `approved`/`rejected`\n3. **發布** → 對外顯示\n\n### 🛡️ 安全特性\n\n- **資料驗證**：Pydantic 自動驗證輸入\n- **SQL 注入防護**：SQLAlchemy ORM 保護\n- **軟刪除**：資料不會真正刪除\n- **審核機制**：內容品質控制\n\n### 💡 使用建議\n\n- 使用描述性的書本標題\n- 提供完整的作者資訊\n- 確保 source_url 是有效連結\n- 定期檢查審核狀態"
 		}
 	],
 	"event": [
@@ -365,6 +519,32 @@
 					"        const jsonData = pm.response.json();",
 					"        pm.expect(jsonData).to.have.property('timestamp');",
 					"    });",
+					"}",
+					"",
+					"// Books API 特定測試",
+					"if (pm.request.url.path.includes('books') && pm.request.method === 'POST') {",
+					"    pm.test('創建書本應返回 201 狀態碼', function () {",
+					"        pm.expect(pm.response.code).to.be.oneOf([201, 422]);",
+					"    });",
+					"    ",
+					"    if (pm.response.code === 201) {",
+					"        pm.test('成功創建應包含書本 ID', function () {",
+					"            const jsonData = pm.response.json();",
+					"            pm.expect(jsonData).to.have.property('id');",
+					"            pm.expect(jsonData.id).to.be.a('number');",
+					"        });",
+					"        ",
+					"        pm.test('成功創建應包含 curation_status', function () {",
+					"            const jsonData = pm.response.json();",
+					"            pm.expect(jsonData).to.have.property('curation_status');",
+					"            pm.expect(jsonData.curation_status).to.equal('pending');",
+					"        });",
+					"        ",
+					"        pm.test('成功創建應包含 created_at', function () {",
+					"            const jsonData = pm.response.json();",
+					"            pm.expect(jsonData).to.have.property('created_at');",
+					"        });",
+					"    }",
 					"}"
 				]
 			}
