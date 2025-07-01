@@ -475,9 +475,437 @@
 							"body": "{\n    \"detail\": [\n        {\n            \"type\": \"string_too_long\",\n            \"loc\": [\"body\", \"title\"],\n            \"msg\": \"String should have at most 255 characters\",\n            \"input\": \"這是一個非常非常非常長的書名...\",\n            \"ctx\": {\"max_length\": 255}\n        }\n    ]\n}"
 						}
 					]
+				},
+				{
+					"name": "獲取所有書本",
+					"request": {
+						"method": "GET",
+						"header": [],
+											"url": {
+						"raw": "{{base_url}}/api/v1/books/?skip=0&limit=10&curation_status=&search=&is_active=",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"books",
+								""
+							],
+							"query": [
+								{
+									"key": "skip",
+									"value": "0",
+									"description": "跳過的記錄數量（用於分頁）"
+								},
+								{
+									"key": "limit",
+									"value": "10",
+									"description": "最大返回記錄數量 (1-1000)"
+								},
+								{
+									"key": "curation_status",
+									"value": "",
+									"description": "按審核狀態篩選 (pending/approved/rejected/archived) - 留空顯示所有"
+								},
+								{
+									"key": "search",
+									"value": "",
+									"description": "在標題和作者中搜尋"
+								},
+								{
+									"key": "is_active",
+									"value": "",
+									"description": "篩選啟用狀態 (true/false) - 留空顯示所有"
+								}
+							]
+						},
+						"description": "## 獲取書本清單\n\n**檢索書本清單，支援篩選和分頁**。\n\n### 📝 請求格式\n- **HTTP Method**: `GET`\n- **Endpoint**: `/api/v1/books/`\n\n### 🔍 查詢參數\n\n| 參數名稱 | 類型 | 預設值 | 說明 | 範例 |\n|----------|------|--------|------|------|\n| `skip` | int | 0 | 跳過的記錄數量（分頁） | 0, 10, 20 |\n| `limit` | int | 100 | 最大返回數量 (1-1000) | 10, 50, 100 |\n| `curation_status` | string | null | 按狀態篩選 | pending, approved |\n| `search` | string | null | 搜尋標題和作者 | \"Python\", \"Hunt\" |\n| `is_active` | bool | null | 篩選啟用狀態 | true, false |\n\n### 🎯 使用場景\n- 📋 **書本列表**：顯示所有可用書本\n- 🔍 **搜尋功能**：按關鍵字搜尋書本\n- 📊 **分類瀏覽**：按狀態分類顯示\n- 📄 **分頁顯示**：處理大量資料\n- 🔧 **管理界面**：管理員檢視和篩選\n\n### 💡 篩選技巧\n- **所有書本**: 不設定任何篩選參數\n- **待審核書本**: `curation_status=pending`\n- **已批准書本**: `curation_status=approved`\n- **搜尋 Python 相關**: `search=Python`\n- **分頁**: `skip=20&limit=10` (第3頁，每頁10筆)\n\n### 📤 回應格式\n- **成功**: 200 OK + 書本陣列\n- **參數錯誤**: 422 Unprocessable Entity"
+					},
+					"response": [
+						{
+							"name": "成功獲取書本清單",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/books/?limit=10",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"books",
+										""
+									],
+									"query": [
+										{
+											"key": "limit",
+											"value": "10"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"id\": 1,\n        \"title\": \"The Pragmatic Programmer\",\n        \"author\": \"Andrew Hunt, David Thomas\",\n        \"source_url\": \"https://pragprog.com/titles/tpp20/the-pragmatic-programmer-20th-anniversary-edition/\",\n        \"curation_status\": \"approved\",\n        \"created_at\": \"2024-06-30T15:30:45.123456Z\"\n    },\n    {\n        \"id\": 2,\n        \"title\": \"Clean Code\",\n        \"author\": \"Robert Martin\",\n        \"source_url\": \"https://example.com/clean-code\",\n        \"curation_status\": \"pending\",\n        \"created_at\": \"2024-06-30T16:15:22.789012Z\"\n    }\n]"
+						},
+						{
+							"name": "空清單回應",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/books/?curation_status=archived",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"books",
+										""
+									],
+									"query": [
+										{
+											"key": "curation_status",
+											"value": "archived"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "[]"
+						}
+					]
+				},
+				{
+					"name": "根據ID獲取書本",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/books/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"books",
+								"1"
+							]
+						},
+						"description": "## 根據ID獲取特定書本\n\n**檢索單一書本的詳細資訊**。\n\n### 📝 請求格式\n- **HTTP Method**: `GET`\n- **Endpoint**: `/api/v1/books/{book_id}`\n\n### 🔗 路徑參數\n\n| 參數名稱 | 類型 | 說明 | 範例 |\n|----------|------|------|------|\n| `book_id` | int | 書本的唯一識別碼 | 1, 2, 123 |\n\n### 🎯 使用場景\n- 📖 **書本詳情頁**：顯示單一書本完整資訊\n- 🔗 **直接連結**：分享特定書本連結\n- ✏️ **編輯前查詢**：更新前先獲取現有資料\n- 📱 **移動端詳情**：點擊書本查看詳情\n\n### 🔒 安全特性\n- 只返回啟用狀態的書本 (`is_active = true`)\n- 已刪除的書本會返回 404 錯誤\n- 不存在的 ID 會返回 404 錯誤\n\n### 📤 回應格式\n- **成功**: 200 OK + 完整書本資料\n- **找不到**: 404 Not Found\n- **無效ID**: 422 Unprocessable Entity"
+					},
+					"response": [
+						{
+							"name": "成功獲取書本",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/books/1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"books",
+										"1"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": 1,\n    \"title\": \"The Pragmatic Programmer\",\n    \"author\": \"Andrew Hunt, David Thomas\",\n    \"source_url\": \"https://pragprog.com/titles/tpp20/the-pragmatic-programmer-20th-anniversary-edition/\",\n    \"curation_status\": \"approved\",\n    \"created_at\": \"2024-06-30T15:30:45.123456Z\"\n}"
+						},
+						{
+							"name": "書本不存在",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/books/9999",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"books",
+										"9999"
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"detail\": \"Book with id 9999 not found\"\n}"
+						}
+					]
+				},
+				{
+					"name": "更新書本資訊",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"The Pragmatic Programmer - 20th Anniversary Edition\",\n    \"curation_status\": \"approved\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/books/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"books",
+								"1"
+							]
+						},
+						"description": "## 更新書本資訊\n\n**修改現有書本的資訊，支援部分更新**。\n\n### 📝 請求格式\n- **Content-Type**: `application/json`\n- **HTTP Method**: `PUT`\n- **Endpoint**: `/api/v1/books/{book_id}`\n\n### 🔗 路徑參數\n\n| 參數名稱 | 類型 | 說明 | 範例 |\n|----------|------|------|------|\n| `book_id` | int | 要更新的書本ID | 1, 2, 123 |\n\n### 📋 可更新欄位 (全部為選填)\n\n| 欄位名稱 | 類型 | 長度限制 | 說明 | 範例 |\n|----------|------|----------|------|------|\n| `title` | string | 1-255 字元 | 書本標題 | \"Updated Title\" |\n| `author` | string | 1-255 字元 | 作者姓名 | \"New Author\" |\n| `source_url` | string | 1-500 字元 | 書本來源連結 | \"https://...\" |\n| `curation_status` | string | 1-50 字元 | 審核狀態 | pending, approved, rejected, archived |\n\n### 🎯 使用場景\n- ✏️ **內容編輯**：修正書本資訊錯誤\n- 🔄 **狀態管理**：更新審核狀態\n- 🔗 **連結更新**：修改失效的來源連結\n- 📊 **批量管理**：批准或拒絕書本\n\n### 💡 部分更新特性\n- 只需提供要更新的欄位\n- 未提供的欄位保持原值不變\n- 支援單一欄位更新\n- 自動更新 `updated_at` 時間戳\n\n### 📤 回應格式\n- **成功**: 200 OK + 更新後的完整書本資料\n- **找不到**: 404 Not Found\n- **驗證錯誤**: 422 Unprocessable Entity"
+					},
+					"response": [
+						{
+							"name": "成功更新書本",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"title\": \"The Pragmatic Programmer - 20th Anniversary Edition\",\n    \"curation_status\": \"approved\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/v1/books/1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"books",
+										"1"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": 1,\n    \"title\": \"The Pragmatic Programmer - 20th Anniversary Edition\",\n    \"author\": \"Andrew Hunt, David Thomas\",\n    \"source_url\": \"https://pragprog.com/titles/tpp20/the-pragmatic-programmer-20th-anniversary-edition/\",\n    \"curation_status\": \"approved\",\n    \"created_at\": \"2024-06-30T15:30:45.123456Z\"\n}"
+						},
+						{
+							"name": "書本不存在",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"curation_status\": \"approved\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/v1/books/9999",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"books",
+										"9999"
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"detail\": \"Book with id 9999 not found\"\n}"
+						},
+						{
+							"name": "驗證錯誤 - 無效資料",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"title\": \"\",\n    \"curation_status\": \"invalid_status\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/v1/books/1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"books",
+										"1"
+									]
+								}
+							},
+							"status": "Unprocessable Entity",
+							"code": 422,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"detail\": [\n        {\n            \"type\": \"string_too_short\",\n            \"loc\": [\"body\", \"title\"],\n            \"msg\": \"String should have at least 1 character\",\n            \"input\": \"\",\n            \"ctx\": {\"min_length\": 1}\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "刪除書本",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/books/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"books",
+								"1"
+							]
+						},
+						"description": "## 刪除書本\n\n**軟刪除書本（標記為非啟用狀態）**。\n\n### 📝 請求格式\n- **HTTP Method**: `DELETE`\n- **Endpoint**: `/api/v1/books/{book_id}`\n\n### 🔗 路徑參數\n\n| 參數名稱 | 類型 | 說明 | 範例 |\n|----------|------|------|------|\n| `book_id` | int | 要刪除的書本ID | 1, 2, 123 |\n\n### 🛡️ 軟刪除機制\n- **不會永久刪除**：資料仍保留在資料庫中\n- **標記為非啟用**：設定 `is_active = false`\n- **隱藏顯示**：後續查詢不會返回此書本\n- **可恢復性**：需要時可透過資料庫操作恢復\n\n### 🎯 使用場景\n- 🗑️ **內容管理**：移除不適當的書本\n- 🔧 **批量清理**：定期清理過期書本\n- 📊 **狀態管理**：管理員操作介面\n- 🛠️ **維護作業**：系統維護時暫時移除\n\n### 🔒 安全特性\n- 只能刪除啟用狀態的書本\n- 已刪除的書本無法再次刪除\n- 操作後立即生效，無法撤銷\n\n### 📤 回應格式\n- **成功**: 204 No Content（無回應內容）\n- **找不到**: 404 Not Found\n- **無效ID**: 422 Unprocessable Entity\n\n### ⚠️ 注意事項\n- 此操作無法透過 API 撤銷\n- 如需恢復，須透過資料庫直接操作\n- 建議在重要操作前先備份資料"
+					},
+					"response": [
+						{
+							"name": "成功刪除書本",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/books/1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"books",
+										"1"
+									]
+								}
+							},
+							"status": "No Content",
+							"code": 204,
+							"_postman_previewlanguage": "text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						},
+						{
+							"name": "書本不存在",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/books/9999",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"books",
+										"9999"
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"detail\": \"Book with id 9999 not found\"\n}"
+						}
+					]
 				}
 			],
-			"description": "## 📚 書本管理 API\n\n提供書本資源的創建、查詢、更新和刪除功能。\n\n### 🎯 核心功能\n\n- **📝 創建書本**：新增書本記錄到系統\n- **🔍 查詢書本**：按條件搜尋和列表顯示\n- **✏️ 更新書本**：修改書本資訊和狀態\n- **🗑️ 刪除書本**：軟刪除機制保護資料\n\n### 📊 資料結構\n\n**書本基本資訊：**\n- `title`: 書本標題\n- `author`: 作者姓名\n- `source_url`: 書本來源連結\n\n**系統管理欄位：**\n- `id`: 唯一識別碼\n- `curation_status`: 審核狀態 (pending/approved/rejected)\n- `created_at`: 創建時間\n- `updated_at`: 更新時間\n- `is_active`: 啟用狀態\n\n### 🔄 審核流程\n\n1. **創建** → `pending` (待審核)\n2. **審核** → `approved`/`rejected`\n3. **發布** → 對外顯示\n\n### 🛡️ 安全特性\n\n- **資料驗證**：Pydantic 自動驗證輸入\n- **SQL 注入防護**：SQLAlchemy ORM 保護\n- **軟刪除**：資料不會真正刪除\n- **審核機制**：內容品質控制\n\n### 💡 使用建議\n\n- 使用描述性的書本標題\n- 提供完整的作者資訊\n- 確保 source_url 是有效連結\n- 定期檢查審核狀態"
+			"description": "## 📚 書本管理 API\n\n提供完整的書本資源 CRUD 操作功能。\n\n### 🎯 核心功能\n\n- **📝 創建書本** (`POST /books/`)：新增書本記錄到系統\n- **🔍 查詢書本** (`GET /books/`)：按條件搜尋和列表顯示\n- **📖 獲取書本** (`GET /books/{id}`)：根據ID獲取特定書本\n- **✏️ 更新書本** (`PUT /books/{id}`)：修改書本資訊和狀態\n- **🗑️ 刪除書本** (`DELETE /books/{id}`)：軟刪除機制保護資料\n\n### 📊 資料結構\n\n**書本基本資訊：**\n- `title`: 書本標題 (1-255字元)\n- `author`: 作者姓名 (1-255字元)\n- `source_url`: 書本來源連結 (1-500字元)\n\n**系統管理欄位：**\n- `id`: 唯一識別碼 (自動產生)\n- `curation_status`: 審核狀態 (pending/approved/rejected/archived)\n- `created_at`: 創建時間 (自動記錄)\n- `updated_at`: 更新時間 (自動更新)\n- `is_active`: 啟用狀態 (軟刪除標記)\n\n### 🔄 典型工作流程\n\n1. **內容提交** → `POST /books/` → 創建 (status: pending)\n2. **內容審核** → `PUT /books/{id}` → 更新狀態 (approved/rejected)\n3. **內容展示** → `GET /books/?curation_status=approved` → 顯示已批准書本\n4. **內容維護** → `PUT /books/{id}` → 更新資訊或狀態\n5. **內容下架** → `DELETE /books/{id}` → 軟刪除\n\n### 🛡️ 安全特性\n\n- **資料驗證**：Pydantic 自動驗證所有輸入\n- **SQL 注入防護**：SQLAlchemy ORM 提供安全查詢\n- **軟刪除保護**：資料不會真正遺失\n- **審核機制**：確保內容品質控制\n- **型別安全**：完整的型別提示和檢查\n\n### 📈 高級功能\n\n**搜尋與篩選：**\n- 按標題和作者搜尋 (`search` 參數)\n- 按審核狀態篩選 (`curation_status` 參數)\n- 分頁支援 (`skip` 和 `limit` 參數)\n- 啟用狀態篩選 (`is_active` 參數)\n\n**部分更新支援：**\n- 只需提供要更新的欄位\n- 未提供的欄位保持原值\n- 自動時間戳更新\n\n### 💡 最佳實踐\n\n**創建書本：**\n- 使用描述性的書本標題\n- 提供完整準確的作者資訊\n- 確保 source_url 是有效可訪問的連結\n\n**審核管理：**\n- 定期檢查待審核書本 (`curation_status=pending`)\n- 為拒絕的書本提供清楚的理由\n- 建立標準化的審核流程\n\n**性能優化：**\n- 使用分頁避免一次載入過多資料\n- 利用搜尋功能精確查找所需書本\n- 適當使用快取減少資料庫查詢\n\n**資料維護：**\n- 定期檢查和更新失效連結\n- 建立備份策略保護重要資料\n- 監控軟刪除的書本，適時清理"
 		}
 	],
 	"event": [

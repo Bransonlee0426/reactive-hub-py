@@ -51,6 +51,59 @@ class BookCreate(BaseModel):
     )
 
 
+class BookUpdate(BaseModel):
+    """
+    Schema for updating an existing book
+    
+    This model validates the JSON data from request body when updating a book.
+    All fields are optional to support partial updates.
+    
+    Fields:
+        title: Book title (optional)
+        author: Book author (optional)
+        source_url: URL where the book can be found (optional)
+        curation_status: Status of book curation process (optional)
+    """
+    
+    title: Optional[str] = Field(
+        None,
+        min_length=1,
+        max_length=255,
+        description="Book title",
+        examples=["The Pragmatic Programmer - Updated Edition"]
+    )
+    
+    author: Optional[str] = Field(
+        None,
+        min_length=1,
+        max_length=255,
+        description="Book author",
+        examples=["Andrew Hunt, David Thomas, New Author"]
+    )
+    
+    source_url: Optional[str] = Field(
+        None,
+        min_length=1,
+        max_length=500,
+        description="URL where the book can be found",
+        examples=["https://updated-link.com/book"]
+    )
+    
+    curation_status: Optional[str] = Field(
+        None,
+        min_length=1,
+        max_length=50,
+        description="Status of the book curation process",
+        examples=["pending", "approved", "rejected", "archived"]
+    )
+    
+    model_config = ConfigDict(
+        validate_assignment=True,
+        str_strip_whitespace=True,
+        use_enum_values=True
+    )
+
+
 class Book(BookCreate):
     """
     Schema for Book API responses

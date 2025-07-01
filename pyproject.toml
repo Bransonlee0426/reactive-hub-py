@@ -1,0 +1,61 @@
+[tool.pyright]
+# Python版本
+pythonVersion = "3.11"
+
+# 型別檢查設定
+typeCheckingMode = "basic"
+
+# 忽略特定錯誤
+reportGeneralTypeIssues = false
+reportOptionalMemberAccess = false
+reportOptionalSubscript = false
+reportPrivateImportUsage = false
+
+# SQLAlchemy 相關的型別檢查忽略
+reportIncompatibleMethodOverride = false
+reportUnknownArgumentType = false
+reportUnknownMemberType = false
+reportUnknownVariableType = false
+reportAttributeAccessIssue = false
+
+# 特定目錄的設定
+include = ["app", "tests"]
+exclude = ["venv", "build", "dist"]
+
+[tool.pylint]
+# Pylint 設定
+disable = [
+    "too-few-public-methods",
+    "too-many-arguments", 
+    "too-many-locals",
+    "import-error",
+    "no-member",
+    "not-callable"
+]
+
+[tool.mypy]
+# MyPy 設定
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
+disallow_incomplete_defs = false
+
+# SQLAlchemy 插件
+plugins = ["sqlalchemy.ext.mypy.plugin"]
+
+# 忽略缺少型別標註的第三方函式庫
+ignore_missing_imports = true
+
+# 特定模組的設定
+[[tool.mypy.overrides]]
+module = "sqlalchemy.*"
+ignore_errors = true
+
+[[tool.mypy.overrides]]
+module = "app.models.*"
+ignore_errors = true
+
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta" 
